@@ -1,3 +1,4 @@
+import textwrap
 import pandas as pd
 import matplotlib.pyplot as plt
 
@@ -10,24 +11,32 @@ output_file_path = 'cleaned_data.xlsx'
 df_cleaned.to_excel(output_file_path, index=False)
 
 soc_network_category = df_cleaned['откуда вы узнали о дне открытых дверей?'].value_counts()
-plt.figure(figsize=(8, 8))  # Set the figure size
-plt.pie(soc_network_category, labels=soc_network_category.index, autopct='%1.1f%%', startangle=140)
-plt.title('Distribution of Social Network Categories')
-plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
-plt.show()
+plt.figure(figsize=(16, 8))
+bars = plt.bar(range(len(soc_network_category)), soc_network_category, color='skyblue')
+plt.xticks(range(len(soc_network_category)), [textwrap.fill(label, 20) for label in soc_network_category.index], rotation=0, fontsize=11.5)
 
-plt.figure(figsize=(16, 8))  # Increased figure size
-soc_network_category.plot(kind='bar', color='skyblue')
-plt.title('Distribution of Social Network Categories')
-plt.xlabel('Social Network')
-plt.ylabel('Count')
-plt.xticks(rotation=0, fontsize = 11.5)  # Rotate x labels for better readability
-plt.tight_layout()  # Adjust layout to prevent labels from being cutoff
+plt.title('Distribution of Social Network Categories',fontsize=15)
+plt.xlabel('Social Network', fontsize=13)
+plt.ylabel('Count', fontsize=13)
+
+for bar in bars:
+    yval = bar.get_height()
+    plt.text(bar.get_x() + bar.get_width()/2, yval, int(yval), va='bottom', fontsize=12)
+plt.tight_layout()
 plt.show()
 
 hum_engagement = df_cleaned['с кем вы пришли на день открытых дверей?'].value_counts()
-plt.figure(figsize=(8, 8))  # Set the figure size
-plt.pie(hum_engagement, labels=hum_engagement.index, autopct='%1.1f%%', startangle=140)
+
+plt.figure(figsize=(12, 6))  # Set the figure size
+bars = hum_engagement.plot(kind='bar', color='salmon', fontsize=15)
+
+for bar in bars.patches:
+    yval = bar.get_height()
+    plt.text(bar.get_x() + bar.get_width()/2, yval, int(yval), va='bottom')
+
 plt.title('Distribution of Engagement of Applicants')
-plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+plt.xlabel('Engagement', fontsize=13)
+plt.ylabel('Count', fontsize=13)
+plt.xticks(rotation=0)
+plt.tight_layout()
 plt.show()
